@@ -1,5 +1,6 @@
 import 'package:chat_app/utils/my_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextField extends StatelessWidget {
   final String labelText;
@@ -24,7 +25,7 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChangedFunction,
       keyboardType: textInputType,
       validator: validatorFunction,
-      style: const TextStyle(fontSize: 18, color: Colors.black),
+      style: TextStyle(fontSize: 18.sp, color: Colors.black),
       cursorColor: const Color(
         0xff3598DB,
       ),
@@ -36,27 +37,27 @@ class CustomTextField extends StatelessWidget {
 
         // contentPadding: const EdgeInsets.only(top: 0),
         suffixIcon: isValid == true
-            ? const Padding(
+            ? Padding(
                 padding: EdgeInsets.only(
-                  top: 35,
-                  left: 35,
-                  right: 10,
+                  top: 35.h,
+                  left: 35.w,
+                  right: 10.w,
                 ),
                 child: ImageIcon(
-                  AssetImage(
+                  const AssetImage(
                     "assets/images/check.png",
                   ),
-                  size: 20,
-                  color: Color(
+                  size: 20.sp,
+                  color: const Color(
                     0xff3598DB,
                   ),
                 ),
               )
             : null,
         labelText: labelText,
-        floatingLabelStyle: const TextStyle(
-            fontSize: 16,
-            color: Color(
+        floatingLabelStyle: TextStyle(
+            fontSize: 16.sp,
+            color: const Color(
               0xff3598DB,
             )),
         enabled: true,
