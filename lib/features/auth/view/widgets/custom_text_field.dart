@@ -9,8 +9,10 @@ class CustomTextField extends StatelessWidget {
   final bool isValid;
   final Function(String) onChangedFunction;
   final bool obscureText;
+  final bool isFirst;
   const CustomTextField(
       {super.key,
+      this.isFirst = false,
       required this.labelText,
       required this.validatorFunction,
       required this.textInputType,
@@ -27,7 +29,7 @@ class CustomTextField extends StatelessWidget {
       validator: validatorFunction,
       style: TextStyle(fontSize: 18.sp, color: Colors.black),
       cursorColor: const Color(
-        0xff3598DB,
+        0xff2872A4,
       ),
       // keyboardType: ,
       decoration: InputDecoration(
@@ -49,7 +51,7 @@ class CustomTextField extends StatelessWidget {
                   ),
                   size: 20.sp,
                   color: const Color(
-                    0xff3598DB,
+                    0xff2872A4,
                   ),
                 ),
               )
@@ -58,7 +60,7 @@ class CustomTextField extends StatelessWidget {
         floatingLabelStyle: TextStyle(
             fontSize: 16.sp,
             color: const Color(
-              0xff3598DB,
+              0xff2872A4,
             )),
         enabled: true,
         enabledBorder: buildBorder(),
@@ -67,7 +69,7 @@ class CustomTextField extends StatelessWidget {
           borderSide: BorderSide(
             width: 3,
             color: Color(
-              0xff3598DB,
+              0xff2872A4,
             ),
           ),
         ),

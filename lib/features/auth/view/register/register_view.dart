@@ -1,3 +1,4 @@
+import 'package:chat_app/features/auth/view/widgets/custom_auth_button.dart';
 import 'package:chat_app/features/auth/view/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +14,17 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
-  bool isValidName = false;
+  bool isValidFirstName = false;
+  bool isValidLastName = false;
+  bool isValidUserName = false;
   bool isEmailAddressValid = false;
   bool isPasswordValid = false;
   bool isConfirmPasswordValid = false;
   bool isRegistering = false;
 
   var firstName = "";
+  var lastName = "";
+  var userName = "";
   var email = "";
   var password = "";
   var confirmPassword = "";
@@ -36,7 +41,7 @@ class _RegisterViewState extends State<RegisterView> {
             Image.asset(
               "assets/images/background@3x.png",
               width: double.infinity,
-              // height: double.infinity,
+              height: MediaQuery.of(context).size.height * 1.25,
               fit: BoxFit.fill,
             ),
             Positioned(
@@ -88,14 +93,66 @@ class _RegisterViewState extends State<RegisterView> {
                         onChangedFunction: (value) {
                           firstName = value;
                           if (value.length < 6) {
-                            isValidName = false;
+                            isValidFirstName = false;
                           } else {
-                            isValidName = true;
+                            isValidFirstName = true;
                           }
                           setState(() {});
                         },
-                        isValid: isValidName,
+                        isValid: isValidFirstName,
                         labelText: "First name",
+                        validatorFunction: (value) {
+                          if (value == null && value!.isEmpty) {
+                            return "Name should not be empty";
+                          }
+                          if (value.length < 6) {
+                            return "Name should be at least 6 characters";
+                          }
+                          return null;
+                        },
+                        textInputType: TextInputType.name,
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      CustomTextField(
+                        onChangedFunction: (value) {
+                          lastName = value;
+                          if (value.length < 6) {
+                            isValidLastName = false;
+                          } else {
+                            isValidLastName = true;
+                          }
+                          setState(() {});
+                        },
+                        isValid: isValidLastName,
+                        labelText: "Last name",
+                        validatorFunction: (value) {
+                          if (value == null && value!.isEmpty) {
+                            return "Name should not be empty";
+                          }
+                          if (value.length < 6) {
+                            return "Name should be at least 6 characters";
+                          }
+                          return null;
+                        },
+                        textInputType: TextInputType.name,
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      CustomTextField(
+                        onChangedFunction: (value) {
+                          userName = value;
+                          if (value.length < 6) {
+                            isValidUserName = false;
+                          } else {
+                            isValidUserName = true;
+                          }
+                          setState(() {});
+                        },
+                        isValid: isValidUserName,
+                        labelText: "Username",
                         validatorFunction: (value) {
                           if (value == null && value!.isEmpty) {
                             return "Name should not be empty";
@@ -179,6 +236,33 @@ class _RegisterViewState extends State<RegisterView> {
                           return null;
                         },
                         textInputType: TextInputType.visiblePassword,
+                      ),
+                      SizedBox(
+                        height: 30.h,
+                      ),
+                      CustomAuthButton(
+                        buttonText: "Register",
+                        onTapFunction: () {},
+                      ),
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {},
+                            child: Text(
+                              "Already have an account? Login",
+                              style: TextStyle(
+                                  color: Color(0xff3598DB),
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15.h,
                       ),
                     ],
                   ),
