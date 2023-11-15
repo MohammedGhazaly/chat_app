@@ -280,7 +280,9 @@ class _RegisterViewState extends State<RegisterView> implements AuthNavigator {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
                               child: Text(
                                 "Already have an account? Login",
                                 style: TextStyle(
@@ -311,7 +313,12 @@ class _RegisterViewState extends State<RegisterView> implements AuthNavigator {
   }
 
   @override
-  void showSuccessDialog({required String title, required String desc}) {
+  void showSuccessDialog({required String title, required String desc}) async {
     CustomDialogs.showSuccessDialog(context: context, title: title, desc: desc);
+  }
+
+  @override
+  void navigate() {
+    Navigator.of(context).pop();
   }
 }

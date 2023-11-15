@@ -14,8 +14,13 @@ class RegisterViewModel extends ChangeNotifier {
           .createUserWithEmailAndPassword(email: email, password: password);
       navigator.showSuccessDialog(
           title: "Account created", desc: "Please verify email before login.");
+      isRegistering = false;
+      notifyListeners();
+
       // Show success
     } on FirebaseAuthException catch (e) {
+      isRegistering = false;
+      notifyListeners();
       if (e.code == "weak-password") {
         navigator.showFailureDialog(title: "Error", desc: "Password is weak");
         // Show error
@@ -24,8 +29,5 @@ class RegisterViewModel extends ChangeNotifier {
         // Show error
       }
     } catch (e) {}
-
-    isRegistering = false;
-    notifyListeners();
   }
 }

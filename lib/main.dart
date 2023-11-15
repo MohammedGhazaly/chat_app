@@ -1,3 +1,4 @@
+import 'package:chat_app/features/auth/view/login/login_view.dart';
 import 'package:chat_app/features/auth/view/register/register_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,11 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               useMaterial3: true,
             ),
-            initialRoute: RegisterView.routeName,
-            routes: {RegisterView.routeName: (context) => const RegisterView()},
+            initialRoute: LoginView.routeName,
+            routes: {
+              RegisterView.routeName: (context) => const RegisterView(),
+              LoginView.routeName: (context) => const LoginView(),
+            },
           );
         });
   }
