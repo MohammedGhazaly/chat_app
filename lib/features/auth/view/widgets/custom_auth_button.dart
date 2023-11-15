@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomAuthButton extends StatelessWidget {
   final Function()? onTapFunction;
   final String buttonText;
+  final bool isLoading;
   const CustomAuthButton(
-      {super.key, this.onTapFunction, required this.buttonText});
+      {super.key,
+      this.onTapFunction,
+      required this.buttonText,
+      required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +32,18 @@ class CustomAuthButton extends StatelessWidget {
               buttonText,
               style: const TextStyle(color: Colors.white),
             ),
-
-            const Icon(
-              Icons.east,
-              color: Colors.white,
-            )
-            // isRegistering == true
-            //     ? const CircularProgressIndicator(
-            //         color: Colors.white,
-            //       )
-            //     : const Icon(
-            //         Icons.east,
-            //         color: Colors.white,
-            //       )
+            isLoading == true
+                ? SizedBox(
+                    height: 32.sp,
+                    width: 32.sp,
+                    child: const CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  )
+                : const Icon(
+                    Icons.east,
+                    color: Colors.white,
+                  )
           ],
         ),
       ),

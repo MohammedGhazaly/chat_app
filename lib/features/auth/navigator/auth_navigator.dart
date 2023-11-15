@@ -1,5 +1,4 @@
 abstract class AuthNavigator {
-  // void showLoading();
-  // void hideLoading();
-  // void showMessage();
+  void showSuccessDialog({required String title, required String desc});
+  void showFailureDialog({required String title, required String desc});
 }

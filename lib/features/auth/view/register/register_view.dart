@@ -1,6 +1,8 @@
+import 'package:chat_app/features/auth/navigator/auth_navigator.dart';
 import 'package:chat_app/features/auth/view/widgets/custom_auth_button.dart';
 import 'package:chat_app/features/auth/view/widgets/custom_text_field.dart';
 import 'package:chat_app/features/auth/view_model/register_view_model.dart';
+import 'package:chat_app/utils/custom_dialogs.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +16,7 @@ class RegisterView extends StatefulWidget {
   State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class _RegisterViewState extends State<RegisterView> implements AuthNavigator {
   final _formKey = GlobalKey<FormState>();
   bool isValidFirstName = false;
   bool isValidLastName = false;
@@ -31,6 +33,14 @@ class _RegisterViewState extends State<RegisterView> {
   var password = "";
   var confirmPassword = "";
   RegisterViewModel registerViewModel = RegisterViewModel();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    registerViewModel.navigator = this;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RegisterViewModel>(
@@ -86,7 +96,7 @@ class _RegisterViewState extends State<RegisterView> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Form(
-                    autovalidateMode: AutovalidateMode.always,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,9 +255,23 @@ class _RegisterViewState extends State<RegisterView> {
                         SizedBox(
                           height: 30.h,
                         ),
-                        CustomAuthButton(
-                          buttonText: "Register",
-                          onTapFunction: () {},
+                        Consumer<RegisterViewModel>(
+                          builder: (context, viewModel, child) {
+                            return CustomAuthButton(
+                              isLoading: viewModel.isRegistering,
+                              buttonText: viewModel.isRegistering
+                                  ? "Creating account..."
+                                  : "Register",
+                              onTapFunction: viewModel.isRegistering
+                                  ? null
+                                  : () {
+                                      if (_formKey.currentState!.validate()) {
+                                        registerViewModel.firebaseRegister(
+                                            email: email, password: password);
+                                      }
+                                    },
+                            );
+                          },
                         ),
                         SizedBox(
                           height: 16.h,
@@ -279,5 +303,15 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
+  }
+
+  @override
+  void showFailureDialog({required String title, required String desc}) {
+    CustomDialogs.showFailureDialog(context: context, title: title, desc: desc);
+  }
+
+  @override
+  void showSuccessDialog({required String title, required String desc}) {
+    CustomDialogs.showSuccessDialog(context: context, title: title, desc: desc);
   }
 }
