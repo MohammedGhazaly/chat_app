@@ -47,7 +47,7 @@ class _LoginViewState extends State<LoginView> implements AuthNavigator {
               Image.asset(
                 "assets/images/background@3x.png",
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height * 1,
                 fit: BoxFit.fill,
               ),
               Positioned(
@@ -156,11 +156,19 @@ class _LoginViewState extends State<LoginView> implements AuthNavigator {
                                 Navigator.pushNamed(
                                     context, RegisterView.routeName);
                               },
-                              child: Text(
-                                "Don't have an account? Create one",
-                                style: TextStyle(
-                                    color: Color(0xff3598DB),
-                                    fontWeight: FontWeight.w500),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Don't have an account? ",
+                                  ),
+                                  Text(
+                                    "Create one",
+                                    style: TextStyle(
+                                      color: Color(0xff3598DB),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                           ],

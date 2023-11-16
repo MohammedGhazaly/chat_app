@@ -1,4 +1,6 @@
+import 'package:chat_app/data/my_user.dart';
 import 'package:chat_app/features/auth/navigator/auth_navigator.dart';
+import 'package:chat_app/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +14,9 @@ class LoginViewModel extends ChangeNotifier {
       notifyListeners();
       final result = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+
+      MyUser myUser = await FireStoreService.getFireStoreUser(result.user!.uid);
+      print(myUser.userName);
 
       // Show success
     } on FirebaseAuthException catch (e) {

@@ -18,16 +18,12 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> implements AuthNavigator {
   final _formKey = GlobalKey<FormState>();
-  bool isValidFirstName = false;
-  bool isValidLastName = false;
+
   bool isValidUserName = false;
   bool isEmailAddressValid = false;
   bool isPasswordValid = false;
   bool isConfirmPasswordValid = false;
-  bool isRegistering = false;
 
-  var firstName = "";
-  var lastName = "";
   var userName = "";
   var email = "";
   var password = "";
@@ -56,7 +52,7 @@ class _RegisterViewState extends State<RegisterView> implements AuthNavigator {
               Image.asset(
                 "assets/images/background@3x.png",
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 1.25,
+                height: MediaQuery.of(context).size.height * 1,
                 fit: BoxFit.fill,
               ),
               Positioned(
@@ -102,59 +98,7 @@ class _RegisterViewState extends State<RegisterView> implements AuthNavigator {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 250.h,
-                        ),
-                        CustomTextField(
-                          onChangedFunction: (value) {
-                            firstName = value;
-                            if (value.length < 6) {
-                              isValidFirstName = false;
-                            } else {
-                              isValidFirstName = true;
-                            }
-                            setState(() {});
-                          },
-                          isValid: isValidFirstName,
-                          labelText: "First name",
-                          validatorFunction: (value) {
-                            if (value == null && value!.isEmpty) {
-                              return "Name should not be empty";
-                            }
-                            if (value.length < 6) {
-                              return "Name should be at least 6 characters";
-                            }
-                            return null;
-                          },
-                          textInputType: TextInputType.name,
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        CustomTextField(
-                          onChangedFunction: (value) {
-                            lastName = value;
-                            if (value.length < 6) {
-                              isValidLastName = false;
-                            } else {
-                              isValidLastName = true;
-                            }
-                            setState(() {});
-                          },
-                          isValid: isValidLastName,
-                          labelText: "Last name",
-                          validatorFunction: (value) {
-                            if (value == null && value!.isEmpty) {
-                              return "Name should not be empty";
-                            }
-                            if (value.length < 6) {
-                              return "Name should be at least 6 characters";
-                            }
-                            return null;
-                          },
-                          textInputType: TextInputType.name,
-                        ),
-                        SizedBox(
-                          height: 20.h,
+                          height: 150.h,
                         ),
                         CustomTextField(
                           onChangedFunction: (value) {
@@ -267,7 +211,9 @@ class _RegisterViewState extends State<RegisterView> implements AuthNavigator {
                                   : () {
                                       if (_formKey.currentState!.validate()) {
                                         registerViewModel.firebaseRegister(
-                                            email: email, password: password);
+                                            email: email,
+                                            password: password,
+                                            userName: userName);
                                       }
                                     },
                             );
@@ -276,21 +222,27 @@ class _RegisterViewState extends State<RegisterView> implements AuthNavigator {
                         SizedBox(
                           height: 16.h,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                "Already have an account? Login",
-                                style: TextStyle(
-                                    color: Color(0xff3598DB),
-                                    fontWeight: FontWeight.w500),
-                              ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Already have an account? ",
+                                ),
+                                Text(
+                                  "Login",
+                                  style: TextStyle(
+                                      color: Color(0xff3598DB),
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                         SizedBox(
                           height: 15.h,
