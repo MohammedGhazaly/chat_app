@@ -40,4 +40,8 @@ class FireStoreService {
     room.adminId = FirebaseAuth.instance.currentUser!.uid;
     await doc.set(room);
   }
+
+  static Future<QuerySnapshot<ChatRoom>> getRooms() {
+    return getRoomsCollection().get();
+  }
 }
