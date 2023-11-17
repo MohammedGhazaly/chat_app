@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RoomWidget extends StatelessWidget {
-  const RoomWidget({super.key});
+  final String roomType;
+  final String roomName;
+  final int membersCount;
+  const RoomWidget(
+      {super.key,
+      required this.roomType,
+      required this.roomName,
+      required this.membersCount});
 
   @override
   Widget build(BuildContext context) {
@@ -22,39 +29,55 @@ class RoomWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 10.h,
-          ),
-          Image.asset(
-            "assets/images/movies.png",
-            width: 125.h,
-            height: 125.h,
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          Text(
-            "The movies zone",
-            maxLines: 2,
-            style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
-                color: Colors.black),
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          Text(
-            "13 Members",
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: Colors.grey,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10.h,
             ),
-          )
-        ],
+            Image.asset(
+              getImage(roomType),
+              width: 125.h,
+              height: 125.h,
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Text(
+              roomName,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Text(
+              membersCount == 1 ? "1 Member" : "$membersCount Members",
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.grey,
+              ),
+            )
+          ],
+        ),
       ),
     );
+  }
+
+  String getImage(String roomType) {
+    switch (roomType) {
+      case "Sports":
+        return "assets/images/sports.png";
+      case "Movies":
+        return "assets/images/movies.png";
+      default:
+        return "assets/images/music.png";
+    }
   }
 }

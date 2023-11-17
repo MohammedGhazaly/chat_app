@@ -2,6 +2,7 @@ import 'package:chat_app/features/add_room/view/add_room_view.dart';
 import 'package:chat_app/features/auth/view/login/login_view.dart';
 import 'package:chat_app/features/auth/view/register/register_view.dart';
 import 'package:chat_app/features/home/view/home_view.dart';
+import 'package:chat_app/features/room_intro/view/room_intro_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,12 +33,13 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               useMaterial3: true,
             ),
-            initialRoute: HomeView.routeName,
+            initialRoute: LoginView.routeName,
             routes: {
               RegisterView.routeName: (context) => const RegisterView(),
               LoginView.routeName: (context) => const LoginView(),
               HomeView.routeName: (context) => const HomeView(),
               AddRoomView.routeName: (context) => const AddRoomView(),
+              RoomIntroView.routeName: (context) => const RoomIntroView(),
             },
           );
         });

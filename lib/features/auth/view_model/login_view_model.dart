@@ -14,9 +14,7 @@ class LoginViewModel extends ChangeNotifier {
       notifyListeners();
       final result = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-
-      MyUser myUser = await FireStoreService.getFireStoreUser(result.user!.uid);
-      print(myUser.userName);
+      navigator.navigate();
 
       // Show success
     } on FirebaseAuthException catch (e) {

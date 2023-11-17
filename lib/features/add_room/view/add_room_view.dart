@@ -167,15 +167,25 @@ class _AddRoomViewState extends State<AddRoomView> implements AddRoomNavigator {
                                 backgroundColor: MyTheme.primaryColor,
                               ),
                               onPressed: () async {
-                                await addRoomViewModel.createRoom();
+                                if (addRoomViewModel.isCreating == false) {
+                                  await addRoomViewModel.createRoom();
+                                }
                               },
-                              child: Text(
-                                "Create",
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              child: addRoomViewModel.isCreating
+                                  ? SizedBox(
+                                      width: 25.w,
+                                      height: 25.w,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Create",
+                                      style: TextStyle(
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                             ),
                           )
                         ],

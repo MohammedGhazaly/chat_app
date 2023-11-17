@@ -38,10 +38,21 @@ class FireStoreService {
     var doc = getRoomsCollection().doc();
     room.roomId = doc.id;
     room.adminId = FirebaseAuth.instance.currentUser!.uid;
+    room.membersCount = 1;
     await doc.set(room);
   }
 
-  static Future<QuerySnapshot<ChatRoom>> getRooms() {
-    return getRoomsCollection().get();
+  static Stream<QuerySnapshot<ChatRoom>> getRooms() {
+    return getRoomsCollection().snapshots();
+  }
+
+  static void updateRoomMembersCount(String roomId) async {
+    // return getRoomsCollection().snapshots();
+    var doc = getRoomsCollection().doc(roomId);
+    var chatRoom = await doc.get();
+    var newMembersCount = chatRoom.data()!.membersCount! + 1;
+    doc.update({
+      "members_count": newMembersCount,
+    });
   }
 }

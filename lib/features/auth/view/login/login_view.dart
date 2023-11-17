@@ -3,6 +3,7 @@ import 'package:chat_app/features/auth/view/register/register_view.dart';
 import 'package:chat_app/features/auth/view/widgets/custom_auth_button.dart';
 import 'package:chat_app/features/auth/view/widgets/custom_text_field.dart';
 import 'package:chat_app/features/auth/view_model/login_view_model.dart';
+import 'package:chat_app/features/home/view/home_view.dart';
 import 'package:chat_app/utils/custom_dialogs.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -189,7 +190,7 @@ class _LoginViewState extends State<LoginView> implements AuthNavigator {
 
   @override
   void navigate() {
-    // TODO: implement navigate
+    Navigator.pushReplacementNamed(context, HomeView.routeName);
   }
 
   @override

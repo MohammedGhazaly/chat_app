@@ -4,7 +4,7 @@ class ChatRoom {
   late String roomType;
   late String? roomId;
   late String? adminId;
-  late String? membersCount;
+  late int? membersCount;
   ChatRoom({
     required this.roomType,
     required this.title,
