@@ -33,6 +33,8 @@ class MyApp extends StatelessWidget {
             title: 'Flutter Demo',
             theme: ThemeData(
               useMaterial3: true,
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
             ),
             initialRoute: LoginView.routeName,
             routes: {

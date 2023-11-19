@@ -55,16 +55,16 @@ class FireStoreService {
     return userSnapShot.data()!;
   }
 
-  static Future<List<String>> getUserIdsExceptLoggedUser() async {
-    List<String> ids = [];
-    QuerySnapshot<MyUser> usersSnapshot = await getUserCollection().get();
-    for (var doc in usersSnapshot.docs) {
-      if (doc.data().id != FirebaseAuth.instance.currentUser!.uid) {
-        ids.add(doc.id);
-      }
-    }
-    return ids;
-  }
+  // static Future<List<String>> getUserIdsExceptLoggedUser() async {
+  //   List<String> ids = [];
+  //   QuerySnapshot<MyUser> usersSnapshot = await getUserCollection().get();
+  //   for (var doc in usersSnapshot.docs) {
+  //     if (doc.data().id != FirebaseAuth.instance.currentUser!.uid) {
+  //       ids.add(doc.id);
+  //     }
+  //   }
+  //   return ids;
+  // }
 
   // Add
 
@@ -83,16 +83,27 @@ class FireStoreService {
   // }
 
   static Stream<QuerySnapshot<ChatRoom>> getAllRooms() async* {
-    var usersId = await FireStoreService.getUserIdsExceptLoggedUser();
-    print(usersId);
+    // var usersId = await FireStoreService.getUserIdsExceptLoggedUser();
+    // print(usersId);
 
-    yield* getRoomsCollection()
-        .where("members", arrayContainsAny: [...usersId]).snapshots();
+    yield* getRoomsCollection().where("members").snapshots();
   }
 
   static Stream<QuerySnapshot<ChatRoom>> getLoggedUsersRoom() async* {
-    yield* getRoomsCollection().where("members",
-        arrayContainsAny: [FirebaseAuth.instance.currentUser!.uid]).snapshots();
+    yield* getRoomsCollection()
+        .where("members", arrayContains: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots();
+  }
+
+  static Future<bool> checkIfUserInRoom(String roomId) async {
+    var chatRoom = await getRoomsCollection().doc(roomId).get();
+    if (chatRoom
+        .data()!
+        .members
+        .contains(FirebaseAuth.instance.currentUser!.uid)) {
+      return true;
+    }
+    return false;
   }
 
   static void incrementMembers(String roomId) async {
