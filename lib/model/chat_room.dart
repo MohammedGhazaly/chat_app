@@ -2,16 +2,18 @@ class ChatRoom {
   late String title;
   late String description;
   late String roomType;
+  late String adminId;
+  late int membersCount;
+  late List<String> members;
   late String? roomId;
-  late String? adminId;
-  late int? membersCount;
   ChatRoom({
     required this.roomType,
     required this.title,
     required this.description,
+    required this.adminId,
+    required this.membersCount,
+    required this.members,
     this.roomId,
-    this.adminId,
-    this.membersCount,
   });
   ChatRoom.fromJson(Map<String, dynamic> jsonData) {
     roomType = jsonData["room_type"];
@@ -20,6 +22,7 @@ class ChatRoom {
     roomId = jsonData["room_id"];
     adminId = jsonData["admin_id"];
     membersCount = jsonData["members_count"];
+    members = jsonData['members'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -29,7 +32,8 @@ class ChatRoom {
       "room_type": roomType,
       "room_id": roomId,
       "admin_id": adminId,
-      "members_count": membersCount
+      "members_count": membersCount,
+      "members": members
     };
   }
 }

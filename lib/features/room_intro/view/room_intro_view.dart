@@ -1,6 +1,7 @@
 import 'package:chat_app/model/chat_room.dart';
 import 'package:chat_app/services/firestore_service.dart';
 import 'package:chat_app/utils/my_theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -106,9 +107,13 @@ class RoomIntroView extends StatelessWidget {
                         backgroundColor: MyTheme.primaryColor,
                         foregroundColor: Colors.white,
                       ),
-                      onPressed: () {
-                        FireStoreService.updateRoomMembersCount(
-                            roomArgs.roomId!);
+                      onPressed: () async {
+                        FireStoreService.incrementMembers(roomArgs.roomId!);
+                        // FireStoreService.addRoomToUser(
+                        //     FirebaseAuth.instance.currentUser!.uid, roomArgs);
+                        await FireStoreService.addUserToRoom(
+                            roomId: roomArgs.roomId!,
+                            userId: FirebaseAuth.instance.currentUser!.uid);
                       },
                       child: Text(
                         "Join",

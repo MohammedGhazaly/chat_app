@@ -1,6 +1,7 @@
 import 'package:chat_app/features/add_room/view/add_room_view.dart';
 import 'package:chat_app/features/auth/view/login/login_view.dart';
 import 'package:chat_app/features/auth/view/register/register_view.dart';
+import 'package:chat_app/features/chat/view/chat_view.dart';
 import 'package:chat_app/features/home/view/home_view.dart';
 import 'package:chat_app/features/room_intro/view/room_intro_view.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
               HomeView.routeName: (context) => const HomeView(),
               AddRoomView.routeName: (context) => const AddRoomView(),
               RoomIntroView.routeName: (context) => const RoomIntroView(),
+              ChatView.routeName: (context) => const ChatView(),
             },
           );
         });

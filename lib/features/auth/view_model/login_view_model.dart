@@ -12,7 +12,7 @@ class LoginViewModel extends ChangeNotifier {
     try {
       isLoging = true;
       notifyListeners();
-      final result = await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       navigator.navigate();
 

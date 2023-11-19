@@ -63,7 +63,7 @@ class HomeView extends StatelessWidget {
             ),
           ),
           backgroundColor: MyTheme.primaryColor,
-          onPressed: () {
+          onPressed: () async {
             Navigator.pushNamed(context, AddRoomView.routeName);
           },
           child: Icon(
@@ -72,7 +72,7 @@ class HomeView extends StatelessWidget {
           ),
         ),
         body: StreamBuilder<QuerySnapshot<ChatRoom>>(
-          stream: FireStoreService.getRooms(),
+          stream: FireStoreService.getLoggedUsersRoom(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(

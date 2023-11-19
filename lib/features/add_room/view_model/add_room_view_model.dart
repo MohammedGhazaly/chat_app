@@ -2,6 +2,7 @@ import 'package:chat_app/features/add_room/navigator/add_room_navigator.dart';
 import 'package:chat_app/model/chat_room.dart';
 import 'package:chat_app/model/room_category.dart';
 import 'package:chat_app/services/firestore_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AddRoomViewModel extends ChangeNotifier {
@@ -40,10 +41,12 @@ class AddRoomViewModel extends ChangeNotifier {
   Future<void> createRoom() async {
     if (formKey.currentState!.validate()) {
       ChatRoom chatRoom = ChatRoom(
-        roomType: selectedCategory.name,
-        title: roomNameController.text,
-        description: roomDescController.text,
-      );
+          roomType: selectedCategory.name,
+          title: roomNameController.text,
+          description: roomDescController.text,
+          adminId: FirebaseAuth.instance.currentUser!.uid,
+          members: [FirebaseAuth.instance.currentUser!.uid],
+          membersCount: 1);
       try {
         isCreating = true;
         notifyListeners();
