@@ -1,4 +1,5 @@
 import 'package:chat_app/model/chat_room.dart';
+import 'package:chat_app/model/message.dart';
 import 'package:chat_app/model/my_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -147,5 +148,32 @@ class FireStoreService {
     }
     await decrementMembers(roomId);
     await getRoomsCollection().doc(roomId).update({"members": newMembers});
+  }
+
+  // Message Methods
+  static CollectionReference<Message> getMessageCollection(String roomId) {
+    return FirebaseFirestore.instance
+        .collection("rooms")
+        .doc(roomId)
+        .collection("messages")
+        .withConverter<Message>(
+      fromFirestore: (snapShot, _) {
+        return Message.fromJson(snapShot.data()!);
+      },
+      toFirestore: (fireStoreMessage, _) {
+        return fireStoreMessage.toJson();
+      },
+    );
+  }
+
+  static Future<void> saveMessageToFireStore(Message message) async {
+    DocumentReference<Message> messageRef =
+        getMessageCollection(message.roomId!).doc();
+    message.id = messageRef.id;
+    await messageRef.set(message);
+  }
+
+  static Stream<QuerySnapshot<Message>> getMessages(String roomId) async* {
+    yield* getMessageCollection(roomId).snapshots();
   }
 }

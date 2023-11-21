@@ -55,7 +55,7 @@ class AllRooms extends StatelessWidget {
               return Expanded(
                 child: GridView.builder(
                   padding: EdgeInsets.all(20.h),
-                  itemCount: rooms!.length,
+                  itemCount: rooms.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 140 / 180,

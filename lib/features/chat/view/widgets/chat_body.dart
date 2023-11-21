@@ -1,5 +1,8 @@
 import 'package:chat_app/features/chat/view_model/chat_view_model.dart';
+import 'package:chat_app/model/message.dart';
+import 'package:chat_app/services/firestore_service.dart';
 import 'package:chat_app/utils/my_theme.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,10 +51,32 @@ class ChatBody extends StatelessWidget {
               child: Column(
                 children: [
                   Flexible(
-                    child: ListView.builder(
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return Container();
+                    child: StreamBuilder<QuerySnapshot<Message>>(
+                      stream: FireStoreService.getMessages(roomId),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: MyTheme.primaryColor,
+                            ),
+                          );
+                        }
+                        if (snapshot.hasData) {
+                          var messages = snapshot.data?.docs.map((e) {
+                            return e.data();
+                          }).toList();
+                          return ListView.builder(
+                            itemCount: messages!.length,
+                            itemBuilder: (context, index) {
+                              return Text(messages[index].content!);
+                            },
+                          );
+                        } else {
+                          return CircularProgressIndicator(
+                            color: MyTheme.primaryColor,
+                          );
+                        }
                       },
                     ),
                   ),
@@ -120,13 +145,26 @@ class ChatBody extends StatelessWidget {
                             ),
                           ),
                           child: InkWell(
-                            onTap: messageViewModel.isEmpty
+                            onTap: messageViewModel.isEmpty ||
+                                    messageViewModel.isSending
                                 ? null
-                                : messageViewModel.sendMessage,
-                            child: const Icon(
-                              Icons.send,
-                              color: Colors.white,
-                            ),
+                                : () async {
+                                    await messageViewModel.sendMessage();
+                                  },
+                            child: messageViewModel.isSending
+                                ? Center(
+                                    child: SizedBox(
+                                      height: 25.h,
+                                      width: 25.h,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : const Icon(
+                                    Icons.send,
+                                    color: Colors.white,
+                                  ),
                           ),
                           // child: InkWell(
                           //   onTap: () {},
