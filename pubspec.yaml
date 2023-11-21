@@ -39,6 +39,7 @@ dependencies:
   flutter_screenutil: ^5.9.0
   google_fonts: ^6.1.0
   grouped_list: ^5.1.2
+  intl: ^0.18.1
   popover: ^0.2.8+2
   provider: ^6.1.1
   rive: null

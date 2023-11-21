@@ -174,6 +174,8 @@ class FireStoreService {
   }
 
   static Stream<QuerySnapshot<Message>> getMessages(String roomId) async* {
-    yield* getMessageCollection(roomId).snapshots();
+    yield* getMessageCollection(roomId)
+        .orderBy("date_sent", descending: false)
+        .snapshots();
   }
 }

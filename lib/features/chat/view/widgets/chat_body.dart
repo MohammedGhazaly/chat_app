@@ -1,3 +1,5 @@
+import 'package:chat_app/features/chat/view/widgets/message_widget.dart';
+import 'package:chat_app/features/chat/view/widgets/messages_list.dart';
 import 'package:chat_app/features/chat/view_model/chat_view_model.dart';
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/services/firestore_service.dart';
@@ -6,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:grouped_list/grouped_list.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ChatBody extends StatelessWidget {
@@ -66,12 +70,15 @@ class ChatBody extends StatelessWidget {
                           var messages = snapshot.data?.docs.map((e) {
                             return e.data();
                           }).toList();
-                          return ListView.builder(
-                            itemCount: messages!.length,
-                            itemBuilder: (context, index) {
-                              return Text(messages[index].content!);
-                            },
-                          );
+                          // return ListView.builder(
+                          //   itemCount: messages!.length,
+                          //   itemBuilder: (context, index) {
+                          //     return MessageWidget(
+                          //       message: messages[index],
+                          //     );
+                          //   },
+                          // );
+                          return MessagesList(messages: messages);
                         } else {
                           return CircularProgressIndicator(
                             color: MyTheme.primaryColor,
@@ -84,103 +91,93 @@ class ChatBody extends StatelessWidget {
                     height: 8.h,
                   ),
                   Consumer<MessageViewModel>(
-                      builder: (context, messageViewModel, _) {
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Flexible(
-                          child: SizedBox(
-                            child: TextFormField(
-                              controller:
-                                  messageViewModel.messageFieldController,
-                              onChanged: messageViewModel.onChangedFunction,
-                              maxLines: 5,
-                              minLines: 1,
-                              cursorColor: MyTheme.primaryColor,
-                              decoration: InputDecoration(
-                                hintText: "Type a message",
-                                hintStyle: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 12.w),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(
-                                      24.r,
+                    builder: (context, messageViewModel, _) {
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Flexible(
+                            child: SizedBox(
+                              child: TextFormField(
+                                controller:
+                                    messageViewModel.messageFieldController,
+                                onChanged: messageViewModel.onChangedFunction,
+                                maxLines: 5,
+                                minLines: 1,
+                                cursorColor: MyTheme.primaryColor,
+                                decoration: InputDecoration(
+                                  hintText: "Type a message",
+                                  hintStyle: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 12.w),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(
+                                        24.r,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(
-                                      24.r,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(
+                                        24.r,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(
-                                      24.r,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(
+                                        24.r,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 15.w,
-                        ),
-                        Container(
-                          width: 60.h,
-                          height: 60.h,
-                          decoration: BoxDecoration(
-                            color: messageViewModel.isEmpty
-                                ? Colors.grey
-                                : MyTheme.primaryColor,
-                            borderRadius: BorderRadius.circular(
-                              100.r,
+                          SizedBox(
+                            width: 15.w,
+                          ),
+                          Container(
+                            width: 60.h,
+                            height: 60.h,
+                            decoration: BoxDecoration(
+                              color: messageViewModel.isEmpty
+                                  ? Colors.grey
+                                  : MyTheme.primaryColor,
+                              borderRadius: BorderRadius.circular(
+                                100.r,
+                              ),
                             ),
-                          ),
-                          child: InkWell(
-                            onTap: messageViewModel.isEmpty ||
-                                    messageViewModel.isSending
-                                ? null
-                                : () async {
-                                    await messageViewModel.sendMessage();
-                                  },
-                            child: messageViewModel.isSending
-                                ? Center(
-                                    child: SizedBox(
-                                      height: 25.h,
-                                      width: 25.h,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
+                            child: InkWell(
+                              onTap: messageViewModel.isEmpty ||
+                                      messageViewModel.isSending
+                                  ? null
+                                  : () async {
+                                      await messageViewModel.sendMessage();
+                                    },
+                              child: messageViewModel.isSending
+                                  ? Center(
+                                      child: SizedBox(
+                                        height: 25.h,
+                                        width: 25.h,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
                                       ),
+                                    )
+                                  : const Icon(
+                                      Icons.send,
+                                      color: Colors.white,
                                     ),
-                                  )
-                                : const Icon(
-                                    Icons.send,
-                                    color: Colors.white,
-                                  ),
-                          ),
-                          // child: InkWell(
-                          //   onTap: () {},
-                          //   child: IconButton(
-                          //     padding: EdgeInsets.all(0),
-                          //     onPressed: () {},
-                          //     icon: Icon(
-                          //       Icons.send,
-                          //       color: Colors.white,
-                          //     ),
-                          //   ),
-                          // ),
-                        )
-                      ],
-                    );
-                  })
+                            ),
+                          )
+                        ],
+                      );
+                    },
+                  )
                 ],
               ),
             ),

@@ -17,7 +17,7 @@ class MessageViewModel extends ChangeNotifier {
       senderName: SharedPrefUtils.getData("userName").toString(),
       senderId: FirebaseAuth.instance.currentUser!.uid,
       content: messageFieldController.text,
-      date: DateTime.now().microsecondsSinceEpoch,
+      date: DateTime.now().millisecondsSinceEpoch,
     );
     isSending = true;
     notifyListeners();
