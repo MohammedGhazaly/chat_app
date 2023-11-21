@@ -38,7 +38,11 @@ dependencies:
     sdk: flutter
   flutter_screenutil: ^5.9.0
   google_fonts: ^6.1.0
+  grouped_list: ^5.1.2
+  popover: ^0.2.8+2
   provider: ^6.1.1
+  rive: null
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_lints: ^2.0.0

@@ -21,27 +21,33 @@ class LoggedUserRooms extends StatelessWidget {
           stream: FireStoreService.getLoggedUsersRoom(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: MyTheme.primaryColor,
+              return Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: MyTheme.primaryColor,
+                  ),
                 ),
               );
             } else if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString()),
+              return Expanded(
+                child: Center(
+                  child: Text(snapshot.error.toString()),
+                ),
               );
             } else {
               var rooms = snapshot.data?.docs.map((e) {
                 return e.data();
               }).toList();
               if (rooms!.isEmpty) {
-                return Center(
-                  child: Text(
-                    "No rooms found",
-                    style: TextStyle(
-                      color: MyTheme.primaryColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20.sp,
+                return Expanded(
+                  child: Center(
+                    child: Text(
+                      "No rooms found",
+                      style: TextStyle(
+                        color: MyTheme.primaryColor,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20.sp,
+                      ),
                     ),
                   ),
                 );

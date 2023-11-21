@@ -4,6 +4,7 @@ import 'package:chat_app/features/auth/view/register/register_view.dart';
 import 'package:chat_app/features/chat/view/chat_view.dart';
 import 'package:chat_app/features/home/view/home_view.dart';
 import 'package:chat_app/features/room_intro/view/room_intro_view.dart';
+import 'package:chat_app/utils/shared_pref.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,14 +12,28 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  late String route;
+
+  await SharedPrefUtils.init();
+  var userName = SharedPrefUtils.getData("userName");
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  if (userName == null) {
+    route = LoginView.routeName;
+  } else {
+    route = HomeView.routeName;
+  }
+  runApp(MyApp(
+    route: route,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String route;
+
+  const MyApp({super.key, required this.route});
 
   // This widget is the root of your application.
   @override
@@ -36,7 +51,7 @@ class MyApp extends StatelessWidget {
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
             ),
-            initialRoute: LoginView.routeName,
+            initialRoute: route,
             routes: {
               RegisterView.routeName: (context) => const RegisterView(),
               LoginView.routeName: (context) => const LoginView(),

@@ -115,7 +115,8 @@ class RoomIntroView extends StatelessWidget {
                         if (isInRoom) {
                           if (!context.mounted) return;
                           Navigator.pushReplacementNamed(
-                              context, ChatView.routeName);
+                              context, ChatView.routeName,
+                              arguments: roomArgs);
                         } else {
                           FireStoreService.incrementMembers(roomArgs.roomId!);
                           // FireStoreService.addRoomToUser(
@@ -126,7 +127,8 @@ class RoomIntroView extends StatelessWidget {
                           if (!context.mounted) return;
 
                           Navigator.pushReplacementNamed(
-                              context, ChatView.routeName);
+                              context, ChatView.routeName,
+                              arguments: roomArgs);
                         }
                       },
                       child: Text(

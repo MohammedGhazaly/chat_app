@@ -106,11 +106,20 @@ class FireStoreService {
     return false;
   }
 
-  static void incrementMembers(String roomId) async {
+  static Future<void> incrementMembers(String roomId) async {
     // return getRoomsCollection().snapshots();
     var doc = getRoomsCollection().doc(roomId);
     var chatRoom = await doc.get();
     var newMembersCount = chatRoom.data()!.membersCount + 1;
+    doc.update({
+      "members_count": newMembersCount,
+    });
+  }
+
+  static Future<void> decrementMembers(String roomId) async {
+    var doc = getRoomsCollection().doc(roomId);
+    var chatRoom = await doc.get();
+    var newMembersCount = chatRoom.data()!.membersCount - 1;
     doc.update({
       "members_count": newMembersCount,
     });
@@ -125,5 +134,18 @@ class FireStoreService {
     doc.update({
       "members": usersList,
     });
+  }
+
+  // Remove user from room
+  static removeUserFromRoom(String roomId) async {
+    final roomSnapShot = await getRoomsCollection().doc(roomId).get();
+    final List<String> newMembers = roomSnapShot.data()!.members;
+    for (var member in roomSnapShot.data()!.members) {
+      if (member == FirebaseAuth.instance.currentUser!.uid) {
+        newMembers.remove(member);
+      }
+    }
+    await decrementMembers(roomId);
+    await getRoomsCollection().doc(roomId).update({"members": newMembers});
   }
 }

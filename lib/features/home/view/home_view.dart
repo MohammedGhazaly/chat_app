@@ -2,12 +2,8 @@ import 'package:chat_app/features/add_room/view/add_room_view.dart';
 import 'package:chat_app/features/auth/view/login/login_view.dart';
 import 'package:chat_app/features/home/view/widgets/all_rooms.dart';
 import 'package:chat_app/features/home/view/widgets/logged_user_rooms.dart';
-import 'package:chat_app/features/home/view/widgets/room_widget.dart';
-import 'package:chat_app/features/room_intro/view/room_intro_view.dart';
-import 'package:chat_app/model/chat_room.dart';
-import 'package:chat_app/services/firestore_service.dart';
 import 'package:chat_app/utils/my_theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chat_app/utils/shared_pref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -50,6 +46,7 @@ class HomeView extends StatelessWidget {
                 padding: EdgeInsets.only(right: 24.w),
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
+                  SharedPrefUtils.removeData(key: "userName");
                   if (!context.mounted) return;
                   Navigator.pushReplacementNamed(context, LoginView.routeName);
                 },
