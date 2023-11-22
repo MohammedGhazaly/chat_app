@@ -7,9 +7,11 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 
 class MessagesList extends StatelessWidget {
+  final ScrollController scrollController;
   const MessagesList({
     super.key,
     required this.messages,
+    required this.scrollController,
   });
 
   final List<Message>? messages;
@@ -17,6 +19,7 @@ class MessagesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GroupedListView<Message, DateTime>(
+      controller: scrollController,
       elements: messages!,
       useStickyGroupSeparators: true,
       floatingHeader: true,

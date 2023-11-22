@@ -1,4 +1,3 @@
-import 'package:chat_app/features/chat/navigator.dart';
 import 'package:chat_app/features/chat/view/widgets/messages_list.dart';
 import 'package:chat_app/features/chat/view_model/chat_view_model.dart';
 import 'package:chat_app/model/message.dart';
@@ -19,12 +18,14 @@ class ChatBody extends StatefulWidget {
 
 class _ChatBodyState extends State<ChatBody> {
   late MessageViewModel messageViewModel;
+  late final ScrollController scrollController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     messageViewModel = MessageViewModel(roomId: widget.roomId);
     messageViewModel.checkRealtimeConnection();
+    scrollController = ScrollController();
   }
 
   @override
@@ -32,6 +33,7 @@ class _ChatBodyState extends State<ChatBody> {
     // TODO: implement dispose
     super.dispose();
     messageViewModel.streamSubscription.cancel();
+    scrollController.dispose();
   }
 
   @override
@@ -96,7 +98,10 @@ class _ChatBodyState extends State<ChatBody> {
                           //     );
                           //   },
                           // );
-                          return MessagesList(messages: messages);
+                          return MessagesList(
+                            messages: messages,
+                            scrollController: scrollController,
+                          );
                         } else {
                           return CircularProgressIndicator(
                             color: MyTheme.primaryColor,
@@ -177,6 +182,11 @@ class _ChatBodyState extends State<ChatBody> {
                                   ? null
                                   : () async {
                                       await messageViewModel.sendMessage();
+                                      final bottomInset = scrollController
+                                          .position.maxScrollExtent;
+                                      scrollController.animateTo(bottomInset,
+                                          duration: Duration(milliseconds: 250),
+                                          curve: Curves.easeInOut);
                                     },
                               child: messageViewModel.isSending
                                   ? Center(
