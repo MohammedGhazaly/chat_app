@@ -7,15 +7,17 @@ import 'package:chat_app/features/room_intro/view/room_intro_view.dart';
 import 'package:chat_app/utils/shared_pref.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Future.delayed(const Duration(seconds: 3));
   late String route;
-
   await SharedPrefUtils.init();
   var userName = SharedPrefUtils.getData("userName");
+  FlutterNativeSplash.remove();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

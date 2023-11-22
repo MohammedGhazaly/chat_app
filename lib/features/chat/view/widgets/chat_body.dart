@@ -19,6 +19,7 @@ class ChatBody extends StatefulWidget {
 class _ChatBodyState extends State<ChatBody> {
   late MessageViewModel messageViewModel;
   late final ScrollController scrollController;
+
   @override
   void initState() {
     // TODO: implement initState

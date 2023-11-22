@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:chat_app/features/chat/navigator.dart';
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/services/firestore_service.dart';
 import 'package:chat_app/utils/shared_pref.dart';
@@ -11,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 class MessageViewModel extends ChangeNotifier {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription streamSubscription;
-
   final String roomId;
   final TextEditingController messageFieldController = TextEditingController();
   bool isSending = false;
@@ -27,21 +25,18 @@ class MessageViewModel extends ChangeNotifier {
           {
             hasInternet = true;
             notifyListeners();
-            print("mobile");
           }
           break;
         case ConnectivityResult.wifi:
           {
             hasInternet = true;
             notifyListeners();
-            print("wifi");
           }
           break;
         default:
           {
             hasInternet = false;
             notifyListeners();
-            print("no");
           }
           break;
       }
