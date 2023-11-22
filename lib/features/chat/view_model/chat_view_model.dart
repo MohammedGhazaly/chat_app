@@ -1,16 +1,53 @@
+import 'dart:async';
+
+import 'package:chat_app/features/chat/navigator.dart';
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/services/firestore_service.dart';
 import 'package:chat_app/utils/shared_pref.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 class MessageViewModel extends ChangeNotifier {
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription streamSubscription;
+
   final String roomId;
   final TextEditingController messageFieldController = TextEditingController();
   bool isSending = false;
   bool isEmpty = true;
+  bool hasInternet = false;
 
   MessageViewModel({required this.roomId});
+
+  void checkRealtimeConnection() {
+    streamSubscription = _connectivity.onConnectivityChanged.listen((event) {
+      switch (event) {
+        case ConnectivityResult.mobile:
+          {
+            hasInternet = true;
+            notifyListeners();
+            print("mobile");
+          }
+          break;
+        case ConnectivityResult.wifi:
+          {
+            hasInternet = true;
+            notifyListeners();
+            print("wifi");
+          }
+          break;
+        default:
+          {
+            hasInternet = false;
+            notifyListeners();
+            print("no");
+          }
+          break;
+      }
+    });
+  }
+
   sendMessage() async {
     Message message = Message(
       roomId: roomId,
@@ -21,8 +58,8 @@ class MessageViewModel extends ChangeNotifier {
     );
     isSending = true;
     notifyListeners();
-    await FireStoreService.saveMessageToFireStore(message);
     messageFieldController.clear();
+    await FireStoreService.saveMessageToFireStore(message);
     onChangedFunction(messageFieldController.text);
     isSending = false;
     notifyListeners();

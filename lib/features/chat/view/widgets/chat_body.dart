@@ -1,26 +1,44 @@
-import 'package:chat_app/features/chat/view/widgets/message_widget.dart';
+import 'package:chat_app/features/chat/navigator.dart';
 import 'package:chat_app/features/chat/view/widgets/messages_list.dart';
 import 'package:chat_app/features/chat/view_model/chat_view_model.dart';
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/services/firestore_service.dart';
 import 'package:chat_app/utils/my_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:grouped_list/grouped_list.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class ChatBody extends StatelessWidget {
+class ChatBody extends StatefulWidget {
   final String roomId;
   const ChatBody({super.key, required this.roomId});
+
+  @override
+  State<ChatBody> createState() => _ChatBodyState();
+}
+
+class _ChatBodyState extends State<ChatBody> {
+  late MessageViewModel messageViewModel;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    messageViewModel = MessageViewModel(roomId: widget.roomId);
+    messageViewModel.checkRealtimeConnection();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    messageViewModel.streamSubscription.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MessageViewModel>(
       create: (context) {
-        return MessageViewModel(roomId: roomId);
+        return messageViewModel;
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -56,7 +74,7 @@ class ChatBody extends StatelessWidget {
                 children: [
                   Flexible(
                     child: StreamBuilder<QuerySnapshot<Message>>(
-                      stream: FireStoreService.getMessages(roomId),
+                      stream: FireStoreService.getMessages(widget.roomId),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -91,7 +109,7 @@ class ChatBody extends StatelessWidget {
                     height: 8.h,
                   ),
                   Consumer<MessageViewModel>(
-                    builder: (context, messageViewModel, _) {
+                    builder: (context, viewModel, _) {
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -144,7 +162,8 @@ class ChatBody extends StatelessWidget {
                             width: 60.h,
                             height: 60.h,
                             decoration: BoxDecoration(
-                              color: messageViewModel.isEmpty
+                              color: messageViewModel.isEmpty ||
+                                      !messageViewModel.hasInternet
                                   ? Colors.grey
                                   : MyTheme.primaryColor,
                               borderRadius: BorderRadius.circular(
@@ -153,7 +172,8 @@ class ChatBody extends StatelessWidget {
                             ),
                             child: InkWell(
                               onTap: messageViewModel.isEmpty ||
-                                      messageViewModel.isSending
+                                      messageViewModel.isSending ||
+                                      !messageViewModel.hasInternet
                                   ? null
                                   : () async {
                                       await messageViewModel.sendMessage();
@@ -168,10 +188,15 @@ class ChatBody extends StatelessWidget {
                                         ),
                                       ),
                                     )
-                                  : const Icon(
-                                      Icons.send,
-                                      color: Colors.white,
-                                    ),
+                                  : messageViewModel.hasInternet
+                                      ? const Icon(
+                                          Icons.send,
+                                          color: Colors.white,
+                                        )
+                                      : Icon(
+                                          Icons.wifi_off,
+                                          color: Colors.white,
+                                        ),
                             ),
                           )
                         ],
