@@ -76,7 +76,7 @@ class _ChatBodyState extends State<ChatBody> {
               child: Column(
                 children: [
                   Flexible(
-                    child: StreamBuilder<QuerySnapshot<Message>>(
+                    child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                       stream: FireStoreService.getMessages(widget.roomId),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
@@ -89,20 +89,14 @@ class _ChatBodyState extends State<ChatBody> {
                         }
                         if (snapshot.hasData) {
                           var messages = snapshot.data?.docs.map((e) {
-                            return e.data();
+                            return Message.fromJson(e.data());
                           }).toList();
-                          // return ListView.builder(
-                          //   itemCount: messages!.length,
-                          //   itemBuilder: (context, index) {
-                          //     return MessageWidget(
-                          //       message: messages[index],
-                          //     );
-                          //   },
-                          // );
+
                           return MessagesList(
                             messages: messages,
                             scrollController: scrollController,
                           );
+                          // return Text("asd");
                         } else {
                           return CircularProgressIndicator(
                             color: MyTheme.primaryColor,

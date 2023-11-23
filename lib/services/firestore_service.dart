@@ -151,31 +151,40 @@ class FireStoreService {
   }
 
   // Message Methods
-  static CollectionReference<Message> getMessageCollection(String roomId) {
+  static CollectionReference<Map<String, dynamic>> getMessageCollection(
+      String roomId) {
     return FirebaseFirestore.instance
         .collection("rooms")
         .doc(roomId)
-        .collection("messages")
-        .withConverter<Message>(
-      fromFirestore: (snapShot, _) {
-        return Message.fromJson(snapShot.data()!);
-      },
-      toFirestore: (fireStoreMessage, _) {
-        return fireStoreMessage.toJson();
-      },
-    );
+        .collection("messages");
+    //     .withConverter<Message>(
+    //   fromFirestore: (snapShot, _) {
+    //     return Message.fromJson(snapShot.data()!);
+    //   },
+    //   toFirestore: (fireStoreMessage, _) {
+    //     return fireStoreMessage.toJson();
+    //   },
+    // );
   }
 
   static Future<void> saveMessageToFireStore(Message message) async {
-    DocumentReference<Message> messageRef =
+    DocumentReference<Map<String, dynamic>> messageRef =
         getMessageCollection(message.roomId!).doc();
     message.id = messageRef.id;
-    await messageRef.set(message);
+    await messageRef.set({
+      "content": message.content,
+      "date": FieldValue.serverTimestamp(),
+      "id": message.id,
+      "room_id": message.roomId,
+      "sender_id": message.senderId,
+      "sender_name": message.senderName
+    });
   }
 
-  static Stream<QuerySnapshot<Message>> getMessages(String roomId) async* {
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getMessages(
+      String roomId) async* {
     yield* getMessageCollection(roomId)
-        .orderBy("date_sent", descending: false)
+        .orderBy("date", descending: false)
         .snapshots();
   }
 }

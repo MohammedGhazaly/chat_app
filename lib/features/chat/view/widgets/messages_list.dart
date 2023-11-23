@@ -1,6 +1,7 @@
 import 'package:chat_app/features/chat/view/widgets/message_widget.dart';
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/utils/my_theme.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -26,7 +27,6 @@ class MessagesList extends StatelessWidget {
       // reverse: true,
       // order: GroupedListOrder.DESC,
       groupHeaderBuilder: (Message message) {
-        final date = DateTime.fromMillisecondsSinceEpoch(message.date!);
         return SizedBox(
           height: 40,
           child: Center(
@@ -37,7 +37,7 @@ class MessagesList extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(8.h),
                 child: Text(
-                  DateFormat.yMMMd().format(date),
+                  DateFormat.yMMMd().format(message.date ?? DateTime.now()),
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -48,13 +48,19 @@ class MessagesList extends StatelessWidget {
         );
       },
       groupBy: (message) {
-        final date = DateTime.fromMillisecondsSinceEpoch(message.date!);
-        return DateTime(date.year, date.month, date.day);
+        final date = message.date ?? DateTime.now();
+
+        return DateTime(
+          date.year,
+          date.month,
+          date.day,
+        );
       },
       itemBuilder: ((context, message) {
         return MessageWidget(
           message: message,
         );
+        // return Text(message.content!);
       }),
     );
   }

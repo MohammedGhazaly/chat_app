@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/services/firestore_service.dart';
 import 'package:chat_app/utils/shared_pref.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 
 class MessageViewModel extends ChangeNotifier {
@@ -49,7 +51,6 @@ class MessageViewModel extends ChangeNotifier {
       senderName: SharedPrefUtils.getData("userName").toString(),
       senderId: FirebaseAuth.instance.currentUser!.uid,
       content: messageFieldController.text,
-      date: DateTime.now().millisecondsSinceEpoch,
     );
     isSending = true;
     notifyListeners();

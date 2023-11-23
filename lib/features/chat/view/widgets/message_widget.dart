@@ -1,5 +1,6 @@
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/utils/my_theme.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,8 +41,7 @@ class MessageWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateFormat.jm().format(
-                        DateTime.fromMillisecondsSinceEpoch(message.date!)),
+                    DateFormat.jm().format(message.date ?? DateTime.now()),
                     style: TextStyle(
                       fontSize: 10.sp,
                     ),
@@ -85,8 +85,7 @@ class MessageWidget extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Text(
-                      DateFormat.jm().format(
-                          DateTime.fromMillisecondsSinceEpoch(message.date!)),
+                      DateFormat.jm().format(message.date ?? DateTime.now()),
                       style: TextStyle(
                         fontSize: 10.sp,
                       ),
