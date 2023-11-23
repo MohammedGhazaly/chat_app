@@ -1,16 +1,12 @@
-# chat_app
+# Chat App
+## Flutter app built using Flutter, MVVM, Provider and Firebase(Auth - Firestore)
 
-A new Flutter project.
+#### Screen Shots
+##### Auth
+![Alt text](screenshots/1.jpg)
 
-## Getting Started
+##### Home
+![Alt text](screenshots/2.jpg)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+##### Room intro and Chat room
+![Alt text](screenshots/3.jpg)
